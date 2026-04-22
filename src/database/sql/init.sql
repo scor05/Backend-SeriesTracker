@@ -4,7 +4,7 @@
 */
 
 CREATE TABLE IF NOT EXISTS series(
-    id_series BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id_serie INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     description TEXT,
     current_episode INT NOT NULL,

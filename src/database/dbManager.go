@@ -1,4 +1,4 @@
-package backendseriestracker
+package database
 
 import (
 	"database/sql"
@@ -36,7 +36,7 @@ func CloseDB() error {
 	return nil
 }
 
-func index() (*[]models.Serie, error) {
+func Index() (*[]models.Serie, error) {
 	db, err := GetDB()
 	if err != nil {
 		return nil, err
@@ -58,7 +58,7 @@ func index() (*[]models.Serie, error) {
 	return &series, nil
 }
 
-func show(id int) (*models.Serie, error) {
+func Show(id int) (*models.Serie, error) {
 	db, err := GetDB()
 	if err != nil {
 		return nil, err
@@ -70,7 +70,7 @@ func show(id int) (*models.Serie, error) {
 	return &serie, nil
 }
 
-func store(s models.Serie) error {
+func Store(s models.Serie) error {
 	db, err := GetDB()
 	if err != nil {
 		return err
@@ -96,7 +96,7 @@ func store(s models.Serie) error {
 	return nil
 }
 
-func update(id int, s models.Serie) error {
+func Update(id int, s models.Serie) error {
 	db, err = GetDB()
 	if err != nil {
 		return err
@@ -119,7 +119,7 @@ func update(id int, s models.Serie) error {
 	return nil
 }
 
-func destroy(id int) error {
+func Destroy(id int) error {
 	db, err = GetDB()
 	if err != nil {
 		return err

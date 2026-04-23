@@ -8,7 +8,7 @@ Este repositorio está diseñado para ir en conjunto con [este otro repositorio 
 
 Para ejecutar el código de este repositorio, se requiere tener instalado el lenguaje `Go`, el cual permite ejecutar el código de dos maneras: corriendolo localmente con `go run .` o bien compilando directamente a binario con `go build -o seriesTracker` (desde la carpeta raíz) y luego ejecutando el archivo `./seriesTracker`, el cual automáticamente empezará a manejar las requests en el puerto `:8080`.
 
-El código también es visible en [este servidor](https://corderito.cuchito.live/series/)
+El código también es visible en [este servidor](https://joelsiervas.online/24472/SeriesTracker/)
 
 ---
 ## Challenges Implementados

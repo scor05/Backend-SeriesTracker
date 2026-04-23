@@ -6,13 +6,26 @@ import (
 	"errors"
 	"net/http"
 	"seriesTracker/src/database"
+	"seriesTracker/src/database/models"
+	"strings"
 	"strconv"
 )
 
 func GetSeries(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	series, err := database.Index()
+	query := strings.TrimSpace(r.URL.Query().Get("q"))
+
+	var (
+		series *[]models.Serie
+		err    error
+	)
+
+	if query == "" {
+		series, err = database.Index()
+	} else {
+		series, err = database.SearchByName(query)
+	}
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(map[string]string{

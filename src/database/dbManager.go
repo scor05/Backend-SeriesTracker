@@ -42,16 +42,35 @@ func Index() (*[]models.Serie, error) {
 		return nil, err
 	}
 
-	var series []models.Serie
 	rows, err := db.Query("SELECT * FROM series")
 	if err != nil {
 		return nil, err
 	}
+
+	return scanSeriesRows(rows)
+}
+
+func SearchByName(query string) (*[]models.Serie, error) {
+	db, err := GetDB()
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := db.Query("SELECT * FROM series WHERE name LIKE ? COLLATE NOCASE", "%"+query+"%")
+	if err != nil {
+		return nil, err
+	}
+
+	return scanSeriesRows(rows)
+}
+
+func scanSeriesRows(rows *sql.Rows) (*[]models.Serie, error) {
 	defer rows.Close()
 
+	var series []models.Serie
 	for rows.Next() {
 		var s models.Serie
-		rows.Scan(
+		err := rows.Scan(
 			&s.Id_serie,
 			&s.Name,
 			&s.Description,
@@ -59,7 +78,14 @@ func Index() (*[]models.Serie, error) {
 			&s.Total_episodes,
 			&s.Img_src,
 		)
+		if err != nil {
+			return nil, err
+		}
 		series = append(series, s)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
 	}
 
 	return &series, nil

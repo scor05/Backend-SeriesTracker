@@ -1,7 +1,9 @@
 package routes
 
 import (
+	"database/sql"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"seriesTracker/src/database"
 	"strconv"
@@ -37,6 +39,13 @@ func GetSeriesID(w http.ResponseWriter, r *http.Request) {
 
 	serie, err := database.Show(id)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			w.WriteHeader(http.StatusNotFound)
+			json.NewEncoder(w).Encode(map[string]string{
+				"error": "Series not found",
+			})
+			return
+		}
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(map[string]string{
 			"error": err.Error(),

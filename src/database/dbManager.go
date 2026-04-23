@@ -72,7 +72,7 @@ func Show(id int) (*models.Serie, error) {
 	}
 
 	var serie models.Serie
-	db.QueryRow("SELECT * FROM series WHERE id_serie=?", id).Scan(
+	err = db.QueryRow("SELECT * FROM series WHERE id_serie=?", id).Scan(
 		&serie.Id_serie,
 		&serie.Name,
 		&serie.Description,
@@ -80,6 +80,9 @@ func Show(id int) (*models.Serie, error) {
 		&serie.Total_episodes,
 		&serie.Img_src,
 	)
+	if err != nil {
+		return nil, err
+	}
 
 	return &serie, nil
 }
@@ -116,7 +119,7 @@ func Update(id int, s models.Serie) error {
 		return err
 	}
 
-	_, err2 := db.Exec(`
+	res, err2 := db.Exec(`
         UPDATE series
         SET name = ?,
             description = ?,
@@ -130,6 +133,15 @@ func Update(id int, s models.Serie) error {
 		return err2
 	}
 
+	rowsAffected, err3 := res.RowsAffected()
+	if err3 != nil {
+		return err3
+	}
+
+	if rowsAffected == 0 {
+		return sql.ErrNoRows
+	}
+
 	return nil
 }
 
@@ -139,9 +151,18 @@ func Destroy(id int) error {
 		return err
 	}
 
-	_, err = db.Exec("DELETE FROM series WHERE id_serie = ?", id)
-	if err != nil {
-		return err
+	res, err2 := db.Exec("DELETE FROM series WHERE id_serie = ?", id)
+	if err2 != nil {
+		return err2
+	}
+
+	rowsAffected, err3 := res.RowsAffected()
+	if err3 != nil {
+		return err3
+	}
+
+	if rowsAffected == 0 {
+		return sql.ErrNoRows
 	}
 
 	return nil

@@ -1,7 +1,9 @@
 package routes
 
 import (
+	"database/sql"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"seriesTracker/src/database"
 	"strconv"
@@ -21,6 +23,13 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 
 	err = database.Destroy(id)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			w.WriteHeader(http.StatusNotFound)
+			json.NewEncoder(w).Encode(map[string]string{
+				"error": "Series not found",
+			})
+			return
+		}
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(map[string]string{
 			"error": err.Error(),
@@ -28,6 +37,5 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]string{"message": "Deletion successful"})
+	w.WriteHeader(http.StatusNoContent)
 }

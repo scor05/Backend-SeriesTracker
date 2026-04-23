@@ -1,7 +1,9 @@
 package routes
 
 import (
+	"database/sql"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"seriesTracker/src/database"
 	"seriesTracker/src/database/models"
@@ -22,9 +24,16 @@ func PutSeries(w http.ResponseWriter, r *http.Request) {
 
 	_, err2 := database.Show(id)
 	if err2 != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		if errors.Is(err2, sql.ErrNoRows) {
+			w.WriteHeader(http.StatusNotFound)
+			json.NewEncoder(w).Encode(map[string]string{
+				"error": "Series not found",
+			})
+			return
+		}
+		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(map[string]string{
-			"error": "Invalid series ID",
+			"error": err2.Error(),
 		})
 		return
 	}
@@ -41,6 +50,13 @@ func PutSeries(w http.ResponseWriter, r *http.Request) {
 
 	err = database.Update(id, serie)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			w.WriteHeader(http.StatusNotFound)
+			json.NewEncoder(w).Encode(map[string]string{
+				"error": "Series not found",
+			})
+			return
+		}
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(map[string]string{
 			"error": err.Error(),

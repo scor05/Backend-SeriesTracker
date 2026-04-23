@@ -1,4 +1,4 @@
-package backendseriestracker
+package routes
 
 import (
 	"encoding/json"
@@ -7,7 +7,7 @@ import (
 	"seriesTracker/src/database/models"
 )
 
-func postSeries(w http.ResponseWriter, r *http.Request) {
+func PostSeries(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var serie models.Serie

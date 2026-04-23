@@ -1,4 +1,4 @@
-package backendseriestracker
+package routes
 
 import (
 	"encoding/json"
@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func getSeries(w http.ResponseWriter, r *http.Request) {
+func GetSeries(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	series, err := database.Index()
@@ -23,7 +23,7 @@ func getSeries(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(series)
 }
 
-func getSeriesID(w http.ResponseWriter, r *http.Request) {
+func GetSeriesID(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	id, err := strconv.Atoi(r.PathValue("id"))

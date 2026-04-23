@@ -6,7 +6,9 @@ Este es el repositorio con el código server-side para mi proyecto #1 de la clas
 ### Instrucciones de ejecución 
 Este repositorio está diseñado para ir en conjunto con [este otro repositorio del código client-side hecho con JS, CSS y HTML nativo](https://github.com/scor05/Frontend-SeriesTracker), el cual también dentro de su `README.md` tiene instrucciones para su ejecución.
 
-Para ejecutar el código de este repositorio, se requiere tener instalado el lenguaje `Go`, el cual permite ejecutar el código de dos maneras: corriendolo localmente con `go run .` o bien compilando directamente a binario con `go build -o seriesTracker` (desde la carpeta raíz) y luego ejecutando el archivo `./seriesTracker`, el cual automáticamente empezará a manejar las requests en el puerto `:8080`.
+Para ejecutar el código de este repositorio, se recomienda tener instalado el lenguaje `Go`, el cual permite ejecutar el código de dos maneras: corriendolo localmente con `go run .` o bien compilando directamente a binario con `go build -o seriesTracker ./src/api` (desde la carpeta raíz obligatoriamente) y luego ejecutando el archivo `./seriesTracker`, el cual automáticamente empezará a manejar las requests en el puerto `:8080`.
+
+También es de notar de que la base de datos guardada en `src/database/sql/series.db` debe de estar en ese mismo path cuando se ejecute el binario, si no retornará un error al no encontrar ese archivo.
 
 El código también es visible en [este servidor](https://joelsiervas.online/24472/SeriesTracker/)
 

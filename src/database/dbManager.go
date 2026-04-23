@@ -19,7 +19,7 @@ var (
 
 func GetDB() (*sql.DB, error) {
 	once.Do(func() {
-		db, err = sql.Open("sqlite", "file:sql/series.db")
+		db, err = sql.Open("sqlite", "file:src/database/sql/series.db")
 		if err != nil {
 			return
 		}
@@ -51,7 +51,14 @@ func Index() (*[]models.Serie, error) {
 
 	for rows.Next() {
 		var s models.Serie
-		rows.Scan(&s)
+		rows.Scan(
+			&s.Id_serie,
+			&s.Name,
+			&s.Description,
+			&s.Current_episode,
+			&s.Total_episodes,
+			&s.Img_src,
+		)
 		series = append(series, s)
 	}
 
@@ -65,7 +72,14 @@ func Show(id int) (*models.Serie, error) {
 	}
 
 	var serie models.Serie
-	db.QueryRow("SELECT * FROM series WHERE id=?", id).Scan(&serie)
+	db.QueryRow("SELECT * FROM series WHERE id_serie=?", id).Scan(
+		&serie.Id_serie,
+		&serie.Name,
+		&serie.Description,
+		&serie.Current_episode,
+		&serie.Total_episodes,
+		&serie.Img_src,
+	)
 
 	return &serie, nil
 }
@@ -125,7 +139,7 @@ func Destroy(id int) error {
 		return err
 	}
 
-	_, err = db.Exec("DELETE FROM series WHERE id = ?", id)
+	_, err = db.Exec("DELETE FROM series WHERE id_serie = ?", id)
 	if err != nil {
 		return err
 	}

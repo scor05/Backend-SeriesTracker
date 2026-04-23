@@ -1,4 +1,4 @@
-package backendseriestracker
+package main
 
 import (
 	"fmt"
@@ -14,6 +14,7 @@ func main() {
 	http.HandleFunc("PUT /series/{id}", routes.PutSeries)
 	http.HandleFunc("DELETE /series/{id}", routes.Delete)
 
+	fmt.Println("Server listening on port 8080")
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		fmt.Println("Error listening to port:", err)
